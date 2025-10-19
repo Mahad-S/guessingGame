@@ -23,6 +23,7 @@ public class Guesser{
    */
   
   // Write the constructor below this line.
+  //Konstruktor som sparar låg och hög gräns för spelet.
     public Guesser(int low, int high){
          this.low = low;
          this.high = high; 
@@ -32,7 +33,11 @@ public class Guesser{
    * in the method body, you call first the
    * rules() method, next the doGuesses() method.
    */
+
+  // Startar spelet, först visa regler sedan börja gissa tal.
   public void start(){
+       rules();
+       doGuesses();
     // call the rules method here
     // call the doGuesses() method here
   }
