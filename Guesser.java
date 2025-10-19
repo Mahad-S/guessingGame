@@ -1,5 +1,5 @@
 import java.io.Console;
-
+import java.util.Scanner;
 /**
  * Assignment 1 - Guessing Game
  * 
@@ -62,6 +62,18 @@ public class Guesser{
    */
   private String getReply(){
     String reply = null;
+    Scanner scanner = new Scanner(System.in);
+
+    while(true){
+      reply = scanner.nextLine();
+      if(reply.equalsIgnoreCase("T") || reply.equalsIgnoreCase("F")){
+          break;
+   } else{
+       System.out.println("Please reply T for true F for false");
+}
+}
+
+
     // Write code here which reads a String from the console.
     // As long as it is not a valid reply (one of "T" and "F")
     // write an error message, and read a new reply.
