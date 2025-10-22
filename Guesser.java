@@ -36,8 +36,8 @@ public class Guesser{
 
   // Startar spelet, först visa regler sedan börja gissa tal.
   public void start(){
-       rules();
-       doGuesses();
+       rules();       // Visa regler
+       doGuesses();   // Börja gissa tal
     // call the rules method here
     // call the doGuesses() method here
   }
