@@ -1,0 +1,124 @@
+#Vad är pull repektive push?
+git pull används för att hämta och uppdatera ditt repository lokalt.
+git push andvänds för att ladda upp dina lokala commmits till ditt repository i github.
+
+#När använder man log respektive status?
+git status visar vilka filer som har ändrats och visar om några filer är tillagda i nästa commit, 
+den visar även om din branch är uppdaterad.
+git log visar en historik över dina commits med datum och meddelande.
+
+#Vad är en Git branch och varför är de viktiga?
+git branch är en seperat utvecklingslinje det viktiga med de är att de gör det möjligt att dela upp arbetet och 
+testa ändringar utan att riskera att förstöra huvudversionen av koden.
+
+#Det finns flera sätt att rulla tillbaka koden till ett tidigare tillstånd. 
+#Förklara skillnaden och motivera när man skulle använda den ena eller andra metoden. 
+#Ge exempel på de kommandon du använder för att göra detta och vissa att det fungerar, vilken output du fick från git-kommandona.
+git restore används för att åndra ändringar i filer innan commit.
+git reset --hard används om du vill ta bort en commit helt
+git reset --mixed används för att ta bort ändringar från staging men behålla 
+dem i arbetskatalogen.
+git reset --soft används för att backa till en tidigare commit men behåller alla 
+dina ändringar som de var.
+
+#Mina tester:
+mkdir tester-demo
+cd tester-demo
+git init
+
+echo "Linje 1" > file.txt
+git add file.txt
+git commit -m "commit 1"
+
+echo "Linje 2" >> file.txt
+git add file.txt
+git commit -m "commit 2"
+
+echo "Linje 3" >> file.txt
+git add file.txt
+git commit -m "commit 3"
+
+#Nu fick jag 3 commits och kunde se det i loggen "git log --oneline"
+ git log --oneline
+70255c8 (HEAD -> master) Commit 3
+9b05346 Commit 2
+3354da6 Commit 1
+
+#Sen testar jag git reset --soft
+git reset --soft 3354da6
+ingen output
+
+#git status för att kolla status
+
+On branch main
+Changes to be comitted:
+modified: file.txt
+
+#Testar nu git reset --hard
+git add file.txt
+git commit -m "commit 3 again"
+git reset --hard 858dab1
+
+output:
+HEAD is now at 858dab1 commit 3 again
+
+#Sen kör jag cat file.txt för att kolla filen
+Linje 1
+Linje 2
+#--hard rullade tillbaka helt ser jag.
+
+#Testar git revert
+git revert 9b05346
+
+output:
+error: Reverting is not possible because you have unmerged files.
+hint: Fix them up in the work tree, and then use 'git add/rm <file>'
+hint: as appropriate to mark resolution and make a commit.
+
+#Fick en konflikt när jag skulle köra kommandot, nu öppnar jag filen
+med nano file.txt för att fixa:
+Linje 1
+<<<<<<< HEAD
+Linje 2
+Linje 3
+=======
+>>>>>>> parent of 9b05346 (Commit 2)
+
+#Så jag löser konflikten genom att ta bort ">>> <<< ==="
+#Sen kör jag:
+git add file.txt
+git revert --continue
+output:
+On branch master You are currently reverting commit 9b05346.
+ (all conflicts fixed: run "git revert --continue")
+ (use "git revert --skip" to skip this patch)
+ (use "git revert --abort" to cancel the revert operation)
+ nothing to commit, working tree clean
+sen kör jag git log --oneline output:
+858dab1 (HEAD -> master) Commit 3 again
+3354da6 Commit 1
+
+
+Exempel på använding av git reset --soft:
+ Du har gjort en commit med små fel och vill ändra meddelandet och göra en ny commit då kan du
+använda git reset --soft.
+Exempel på använding av git reset --mixed:
+ Du lade till filer till staging men inser att de inte ska vara med i nästa 
+commit.
+Exempel på använding av git reset --hard:
+ Du gjorde något som gick helt fel och vill återsälla det helt då används
+denna.
+ 
+
+#Tips: Gör exemplen med att backa i en branch så att master fortfarande är korrekt. 
+Jag gjorde några test-commits och testade några olika sätt att backa 
+men först skapade jag en ny branch för att testa.
+Detta var mina tester:
+
+git reset --soft HEAD~1
+Backade en commit men behållde alla ändringar i arbetskatalogen.
+
+git reset --hard HEAD~1
+Backade en commit och tog bort alla ändringar helt.
+
+
